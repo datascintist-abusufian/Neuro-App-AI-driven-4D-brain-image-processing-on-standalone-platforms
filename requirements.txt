@@ -1,5 +1,16 @@
+# Re-creating the requirements.txt file with the same content as the user's file
 
+requirements_content = """
 streamlit
 tensorflow
 pandas
 numpy
+"""
+
+# Writing the content to a file
+with open("/mnt/data/requirements.txt", "w") as file:
+    file.write(requirements_content)
+
+# Providing the path for download
+file_path = "/mnt/data/requirements.txt"
+file_path
