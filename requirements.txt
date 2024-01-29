@@ -1,16 +1,14 @@
-# Re-creating the requirements.txt file with the same content as the user's file
-
-requirements_content = """
-streamlit
-tensorflow
-pandas
-numpy
+updated_requirements_content = """
+streamlit==1.10.0
+tensorflow==2.8.0
+pandas==1.3.4
+numpy==1.21.2
 """
 
-# Writing the content to a file
-with open("/mnt/data/requirements.txt", "w") as file:
-    file.write(requirements_content)
+# Writing the updated content to a file
+with open("/mnt/data/updated_requirements.txt", "w") as file:
+    file.write(updated_requirements_content)
 
 # Providing the path for download
-file_path = "/mnt/data/requirements.txt"
-file_path
+updated_file_path = "/mnt/data/updated_requirements.txt"
+updated_file_path
