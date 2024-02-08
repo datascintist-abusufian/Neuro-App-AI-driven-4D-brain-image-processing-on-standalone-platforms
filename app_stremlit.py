@@ -5,11 +5,12 @@ import cv2
 from tensorflow.keras.preprocessing import image
 from keras.models import load_model
 import streamlit as st
-from PIL import Image
+import Image from PIL 
 import requests  # Ensure requests is imported
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
 # Sidebar for file upload
+st.sidebar.title("Brain Tumor Detection")
 uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
 
 # Title and description
