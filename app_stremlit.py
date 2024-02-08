@@ -70,15 +70,16 @@ if uploaded_image is not None:
             img_array = img_array / 255.0  # Normalizing
             img_array = np.expand_dims(img_array, axis=0)  # Adding batch dimension
             
-            # Making a prediction (assuming your model outputs a segmented mask)
-            segmentation_mask = model.predict(img_array)
+            # Predict the segmentation mask
+            pred_mask = model.predict(img_array)[0]  # Assuming the model returns a batch
             
             # For demonstration, assuming the segmentation mask is the direct output
             # Convert segmentation mask back to image
             # Note: This step highly depends on your model's specific output format
             mask = np.argmax(segmentation_mask, axis=-1)
             mask = np.squeeze(mask)  # Remove batch dimension
-            mask_img = Image.fromarray((mask * 255).astype(np.uint8))
+            pred_mask = (pred_mask > 0.5).astype(np.uint8)  # Threshold the predictions to get binary mask
+            mask_img = Image.fromarray(pred_mask.squeeze() * 255)  # Convert to an image
             
             # Displaying original and segmented images
             st.image(uploaded_image, caption="Uploaded MRI Image", use_column_width=True)
