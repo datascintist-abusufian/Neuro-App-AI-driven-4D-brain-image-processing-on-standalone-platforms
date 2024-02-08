@@ -58,6 +58,10 @@ st.title("Brain Tumor Detection 4D Brain MRI Imaging")
 # Streamlit UI for showing segmentation results
 if uploaded_image is not None:
     if uploaded_image.type in ["image/jpeg", "image/png", "image/jpg"]:
+    # Display the uploaded image
+    img = Image.open(uploaded_image).convert('RGB')
+    st.image(img, caption="Uploaded MRI Image", use_column_width=True)
+    
         try:
             # Reading the image
             img = Image.open(uploaded_image)
