@@ -5,7 +5,7 @@ import cv2
 from tensorflow.keras.preprocessing import image
 from keras.models import load_model
 import streamlit as st
-import Image from PIL 
+from PIL import Image 
 import requests  # Ensure requests is imported
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
