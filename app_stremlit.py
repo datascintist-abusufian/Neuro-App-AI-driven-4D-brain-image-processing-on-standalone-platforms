@@ -9,6 +9,24 @@ from PIL import Image
 
 st.image("BrainTumor.gif", use_column_width=True)
 
+# Title and description
+st.title("4D AI Driven Neuro App")
+st.write("This app demonstrates Brain Image segmentation and tumor detection and prevention using web application.")
+st.markdown("<span style='color:blue'>Author Md Abu Sufian</span>", unsafe_allow_html=True)
+st.write( " ......Visualisation of Design and Coding Under Construction.........")
+
+
+def download_model(url, model_name):
+    """
+    Download the model from a given URL if it's not already in the cache.
+    """
+    if not os.path.isfile(model_name):
+        with st.spinner(f'Downloading {model_name}...'):
+            r = requests.get(url)
+            with open(model_name, 'wb') as f:
+                f.write(r.content)
+    return model_name
+    
 # Function to load the model (cached)
 @st.cache(allow_output_mutation=True)
 def load_my_model():
