@@ -7,7 +7,7 @@ from keras.models import load_model
 import streamlit as st
 from PIL import Image
 
-st.image("Real_DL_architect.gif", use_column_width=True)
+st.image("BrainTumor.gif", use_column_width=True)
 
 # Function to load the model (cached)
 @st.cache(allow_output_mutation=True)
