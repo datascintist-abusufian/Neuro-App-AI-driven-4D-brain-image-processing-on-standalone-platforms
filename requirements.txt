@@ -1,5 +1,3 @@
-# Writing the updated content to a file
-updated_requirements_content = """
 streamlit==1.10.0
 tensorflow==2.8.0
 pandas==1.3.4
@@ -7,12 +5,3 @@ numpy==1.21.2
 opencv-python-headless==4.5.5.62
 pillow==8.3.1
 requests==2.26.0
-"""
-
-# Writing the updated content to a file
-with open("/mnt/data/updated_requirements_v2.txt", "w") as file:
-    file.write(updated_requirements_content)
-
-# Providing the path for download
-updated_file_path_v2 = "/mnt/data/updated_requirements_v2.txt"
-updated_file_path_v2
