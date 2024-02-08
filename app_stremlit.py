@@ -9,6 +9,8 @@ from PIL import Image
 import requests  # Ensure requests is imported
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
+# Sidebar for file upload
+uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
 
 # Title and description
 st.title("4D AI Driven Neuro App")
@@ -51,10 +53,7 @@ def get_className(class_no):
 model = load_my_model()
 st.title("Brain Tumor Detection 4D Brain MRI Imaging")
 
-# Streamlit UI
-st.title('Brain Tumor Detection Web App')
-uploaded_image = st.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
-
+# Streamlit UI for showing segmentation results
 if uploaded_image is not None:
     if uploaded_image.type in ["image/jpeg", "image/png", "image/jpg"]:
         try:
@@ -62,17 +61,25 @@ if uploaded_image is not None:
             img = Image.open(uploaded_image)
             img = img.resize((256, 256))
             img_array = np.array(img)
-            img_array = np.expand_dims(img_array, axis=0)
-            img_array /= 255.0
-
-            # Making a prediction
-            prediction = model.predict(img_array)
-            classification = prediction.argmax()
-            classification_text = get_className(classification)
-
-            # Displaying results
+            img_array = img_array / 255.0  # Normalizing
+            img_array = np.expand_dims(img_array, axis=0)  # Adding batch dimension
+            
+            # Making a prediction (assuming your model outputs a segmented mask)
+            segmentation_mask = model.predict(img_array)
+            
+            # For demonstration, assuming the segmentation mask is the direct output
+            # Convert segmentation mask back to image
+            # Note: This step highly depends on your model's specific output format
+            mask = np.argmax(segmentation_mask, axis=-1)
+            mask = np.squeeze(mask)  # Remove batch dimension
+            mask_img = Image.fromarray((mask * 255).astype(np.uint8))
+            
+            # Displaying original and segmented images
             st.image(uploaded_image, caption="Uploaded MRI Image", use_column_width=True)
-            st.write(classification_text)
+            st.image(mask_img, caption="Segmentation Result", use_column_width=True)
+            
+            # If you have specific accuracy or other metric, display it here
+            # st.write("Detection Accuracy: XX%")
 
         except Exception as e:
             st.error(f"Error occurred: {e}")
