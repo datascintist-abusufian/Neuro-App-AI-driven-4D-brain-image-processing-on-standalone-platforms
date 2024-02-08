@@ -30,7 +30,9 @@ def download_model(url, model_name):
 # Function to load the model (cached)
 @st.cache(allow_output_mutation=True)
 def load_my_model():
-    model = load_model('BrainTumor10Epochs.h5')
+    model_url = load_model('https://raw.githubusercontent.com/datascintist-abusufian/Neuro-App-AI-driven-4D-brain-image-processing-on-standalone-platforms/main/BrainTumor10Epochs.h5')
+    model_path = download_model(model_url, 'BrainTumor10Epochs.h5')
+    return tf.keras.models.load_model(model_path)
     return model
 
 # Function to get class name
@@ -42,6 +44,7 @@ def get_className(class_no):
 
 # Loading the model
 model = load_my_model()
+st.title("Brain Tumor Detection 4D Brain MRI Imaging")
 
 # Streamlit UI
 st.title('Brain Tumor Detection Web App')
