@@ -7,7 +7,7 @@ from keras.models import load_model
 import streamlit as st
 from PIL import Image
 
-st.image("BrainTumor.gif", width=600)
+st.image("BrainTumor.gif", width=200)
 
 # Title and description
 st.title("4D AI Driven Neuro App")
