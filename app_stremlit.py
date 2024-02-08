@@ -6,6 +6,7 @@ from tensorflow.keras.preprocessing import image
 from keras.models import load_model
 import streamlit as st
 from PIL import Image
+import requests  # Ensure requests is imported
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
 
@@ -16,23 +17,27 @@ st.markdown("<span style='color:blue'>Author Md Abu Sufian</span>", unsafe_allow
 st.write( " ......Visualisation of Design and Coding Under Construction.........")
 
 
+# Correctly download and then load the model
 def download_model(url, model_name):
     """
     Download the model from a given URL if it's not already in the cache.
     """
     if not os.path.isfile(model_name):
         with st.spinner(f'Downloading {model_name}...'):
-            r = requests.get(url)
-            with open(model_name, 'wb') as f:
-                f.write(r.content)
+            r = requests.get(url, stream=True)
+            if r.status_code == 200:
+                with open(model_name, 'wb') as f:
+                    f.write(r.content)
+            else:
+                raise Exception(f"Error downloading the model: HTTP {r.status_code}")
     return model_name
     
 # Function to load the model (cached)
 @st.cache(allow_output_mutation=True)
 def load_my_model():
-    model_url = load_model('https://raw.githubusercontent.com/datascintist-abusufian/Neuro-App-AI-driven-4D-brain-image-processing-on-standalone-platforms/main/BrainTumor10Epochs.h5')
+    model_url = 'https://raw.githubusercontent.com/datascintist-abusufian/Neuro-App-AI-driven-4D-brain-image-processing-on-standalone-platforms/main/BrainTumor10Epochs.h5'
     model_path = download_model(model_url, 'BrainTumor10Epochs.h5')
-    return tf.keras.models.load_model(model_path)
+    model = load_model(model_path)  # Corrected to load from the local path
     return model
 
 # Function to get class name
