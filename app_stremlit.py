@@ -63,8 +63,7 @@ if uploaded_image is not None:
         st.image(img, caption="Uploaded MRI Image", use_column_width=True)
     
         try:
-            # Reading the image
-            img = Image.open(uploaded_image)
+            # Prepare the image for prediction
             img = img.resize((256, 256))
             img_array = np.array(img)
             img_array = img_array / 255.0  # Normalizing
@@ -73,20 +72,12 @@ if uploaded_image is not None:
             # Predict the segmentation mask
             pred_mask = model.predict(img_array)[0]  # Assuming the model returns a batch
             
-            # For demonstration, assuming the segmentation mask is the direct output
-            # Convert segmentation mask back to image
-            # Note: This step highly depends on your model's specific output format
-            mask = np.argmax(segmentation_mask, axis=-1)
-            mask = np.squeeze(mask)  # Remove batch dimension
-            pred_mask = (pred_mask > 0.5).astype(np.uint8)  # Threshold the predictions to get binary mask
+            # Assuming the segmentation mask is binary, threshold to get binary mask
+            pred_mask = (pred_mask > 0.5).astype(np.uint8)  # Adjust threshold as needed
             mask_img = Image.fromarray(pred_mask.squeeze() * 255)  # Convert to an image
             
-            # Displaying original and segmented images
-            st.image(uploaded_image, caption="Uploaded MRI Image", use_column_width=True)
+            # Displaying segmented image
             st.image(mask_img, caption="Segmentation Result", use_column_width=True)
-            
-            # If you have specific accuracy or other metric, display it here
-            # st.write("Detection Accuracy: XX%")
 
         except Exception as e:
             st.error(f"Error occurred: {e}")
