@@ -11,7 +11,7 @@ import requests  # Ensure requests is imported
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
 # Sidebar for file upload
 st.sidebar.title("Brain Tumor Detection")
-st.write ("User friendly, Public can test the MRI image segmentation accuracy")
+st.sidebar.title ("User friendly, Public can test the MRI image segmentation accuracy")
 uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
 
 # Title and description
