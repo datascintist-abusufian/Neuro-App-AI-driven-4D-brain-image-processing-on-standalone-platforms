@@ -63,12 +63,6 @@ if uploaded_image is not None:
         st.image(img, caption="Uploaded MRI Image", use_column_width=True)
     
         try:
-            # Prepare the image for prediction
-            img = img.resize((256, 256))
-            img_array = np.array(img)
-            img_array = img_array / 255.0  # Normalizing
-            img_array = np.expand_dims(img_array, axis=0)  # Adding batch dimension
-            
         # Prepare the image for prediction (resize and normalize)
         img = img.resize((256, 256))
         img_array = np.array(img) / 255.0
