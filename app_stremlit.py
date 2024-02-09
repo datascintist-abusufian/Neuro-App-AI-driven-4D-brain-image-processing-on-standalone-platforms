@@ -56,11 +56,13 @@ if uploaded_image is not None:
         threshold = 0.5
         binary_mask = (pred_mask > threshold).astype(np.uint8)
         
-        overlay = Image.fromarray((binary_mask * 255).astype(np.uint8), mode='L')
-        img_with_overlay = Image.composite(overlay, img, overlay)
+        # Create an RGBA image for the overlay with the mask as the alpha channel
+        mask_colored = np.stack([binary_mask*0, binary_mask*255, binary_mask*0, binary_mask*255], axis=-1)
+        overlay = Image.fromarray(mask_colored, mode='RGBA')
+        img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
         
         st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
     except Exception as e:
-        st.error(f"An error occurred: {e}")
+        st.error(f"An error occurred: {str(e)}")  # Display the actual error message
 else:
     st.error("Please upload an image file.")
