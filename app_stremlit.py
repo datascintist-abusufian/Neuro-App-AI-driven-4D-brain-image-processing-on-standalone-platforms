@@ -5,7 +5,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 
-st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", width=200)
+st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
 
 # Sidebar for file upload
 st.sidebar.title("Brain Tumor Detection")
