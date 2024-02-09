@@ -69,28 +69,29 @@ if uploaded_image is not None:
             img_array = img_array / 255.0  # Normalizing
             img_array = np.expand_dims(img_array, axis=0)  # Adding batch dimension
             
-    # Prepare the image for prediction (resize and normalize)
-    img = img.resize((256, 256))
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-    
-    # Predict the segmentation mask
-    pred_mask = model.predict(img_array)
-    # Assuming the model outputs a mask with the same dimensions as the input image
-    pred_mask = pred_mask[0, :, :, 0]  # Update this indexing based on your model's output shape
-    
-    # Convert the prediction to binary mask
-    threshold = 0.5  # You may need to adjust this threshold
-    binary_mask = (pred_mask > threshold).astype(np.uint8)
-    
-    # Create an overlay mask on the original image
-    overlay = Image.fromarray((binary_mask * 255).astype(np.uint8), mode='L')
-    img_with_overlay = Image.composite(overlay, img, overlay)
-    
-    # Display the segmentation result
-    st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
+    try:
+        # Prepare the image for prediction (resize and normalize)
+        img = img.resize((256, 256))
+        img_array = np.array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+        
+        # Predict the segmentation mask
+        pred_mask = model.predict(img_array)
+        # Assuming the model outputs a mask with the same dimensions as the input image
+        pred_mask = pred_mask[0, :, :, 0]  # Update this indexing based on your model's output shape
+        
+        # Convert the prediction to binary mask
+        threshold = 0.5  # You may need to adjust this threshold
+        binary_mask = (pred_mask > threshold).astype(np.uint8)
+        
+        # Create an overlay mask on the original image
+        overlay = Image.fromarray((binary_mask * 255).astype(np.uint8), mode='L')
+        img_with_overlay = Image.composite(overlay, img, overlay)
+        
+        # Display the segmentation result
+        st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
 
-        except Exception as e:
-            st.error(f"Error occurred: {e}")
-    else:
-        st.error("Please upload an image file.")
+    except Exception as e:
+        st.error(f"Error occurred: {e}")
+else:
+    st.error("Please upload an image file.")
