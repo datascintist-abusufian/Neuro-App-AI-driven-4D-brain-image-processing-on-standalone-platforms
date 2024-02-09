@@ -62,7 +62,7 @@ if uploaded_image is not None:
         img = Image.open(uploaded_image).convert('RGB')
         st.image(img, caption="Uploaded MRI Image", use_column_width=True)
     
-        try:
+try:
         # Prepare the image for prediction (resize and normalize)
         img = img.resize((256, 256))
         img_array = np.array(img) / 255.0
