@@ -84,7 +84,7 @@ try:
         # Display the segmentation result
         st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
 
-    except Exception as e:
+except Exception as e:
         st.error(f"Error occurred: {e}")
 else:
     st.error("Please upload an image file.")
