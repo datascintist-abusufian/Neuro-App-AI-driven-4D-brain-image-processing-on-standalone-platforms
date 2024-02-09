@@ -36,21 +36,27 @@ def download_model(url, model_name):
                 raise Exception(f"Error downloading the model: HTTP {r.status_code}")
     return model_name
     
-# Function to load the model (cached)
+MODEL_PATH = 'BrainTumor10Epochs.h5'  # The name of the model file
+
+# Function to download the model if it's not already on the filesystem
+def download_model(model_url, model_path):
+    if not os.path.isfile(model_path):
+        with st.spinner(f'Downloading model...'):
+            response = requests.get(model_url)
+            if response.status_code == 200:
+                with open(model_path, 'wb') as file:
+                    file.write(response.content)
+            else:
+                raise Exception(f"Error downloading the model: HTTP {response.status_code}")
+
+# Load your trained model
 @st.cache(allow_output_mutation=True)
 def load_my_model():
-    model_url = 'https://raw.githubusercontent.com/datascintist-abusufian/Neuro-App-AI-driven-4D-brain-image-processing-on-standalone-platforms/main/BrainTumor10Epochs.h5'
-    model_path = download_model(model_url, 'BrainTumor10Epochs.h5')
-    model = load_model(model_path)  # Corrected to load from the local path
+    model_url = 'https://raw.githubusercontent.com/datascintist-abusufian/Neuro-App-AI-driven-4D-brain-image-processing-on-standalone-platforms/main/' + MODEL_PATH
+    download_model(model_url, MODEL_PATH)
+    model = load_model(MODEL_PATH)  # Load the model from the local path
     return model
-
-# Function to get class name
-def get_className(class_no):
-    if class_no == 0:
-        return 'Brain Tumor detected in this MRI Image. The patient needs to consult the Neuro Specialist.'
-    elif class_no == 1:
-        return 'Brain Tumor not detected in this MRI Image. The patient does not need to consult the Neuro specialist.'
-
+    
 # Loading the model
 model = load_my_model()
 st.title("Brain Tumor Detection 4D Brain MRI Imaging")
