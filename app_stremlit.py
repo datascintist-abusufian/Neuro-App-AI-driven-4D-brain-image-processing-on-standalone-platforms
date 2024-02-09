@@ -55,22 +55,23 @@ def get_className(class_no):
 model = load_my_model()
 st.title("Brain Tumor Detection 4D Brain MRI Imaging")
 
-# Streamlit UI for showing segmentation results
+# Streamlit UI
+st.sidebar.title("Brain Tumor Detection")
+uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"])
+
 if uploaded_image is not None:
-    if uploaded_image.type in ["image/jpeg", "image/png", "image/jpg"]:
-        # Display the uploaded image
-        img = Image.open(uploaded_image).convert('RGB')
-        st.image(img, caption="Uploaded MRI Image", use_column_width=True)
-    
-try:
+    # Ensure 'img' is defined in this scope
+    img = Image.open(uploaded_image).convert('RGB')
+    st.image(img, caption="Uploaded MRI Image", use_column_width=True)
+
+    try:
         # Prepare the image for prediction (resize and normalize)
-        img = img.resize((256, 256))
-        img_array = np.array(img) / 255.0
+        img_for_pred = img.resize((256, 256))  # Create a new variable to avoid redefining 'img'
+        img_array = np.array(img_for_pred) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         
         # Predict the segmentation mask
         pred_mask = model.predict(img_array)
-        # Assuming the model outputs a mask with the same dimensions as the input image
         pred_mask = pred_mask[0, :, :, 0]  # Update this indexing based on your model's output shape
         
         # Convert the prediction to binary mask
@@ -83,8 +84,7 @@ try:
         
         # Display the segmentation result
         st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
-
-except Exception as e:
+    except Exception as e:
         st.error(f"Error occurred: {e}")
 else:
     st.error("Please upload an image file.")
