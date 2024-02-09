@@ -69,7 +69,6 @@ if uploaded_image is not None:
             img_array = img_array / 255.0  # Normalizing
             img_array = np.expand_dims(img_array, axis=0)  # Adding batch dimension
             
-    try:
         # Prepare the image for prediction (resize and normalize)
         img = img.resize((256, 256))
         img_array = np.array(img) / 255.0
