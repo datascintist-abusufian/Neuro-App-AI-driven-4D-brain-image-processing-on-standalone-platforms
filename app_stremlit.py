@@ -36,6 +36,25 @@ def load_my_model():
     return model
 
 model = load_my_model()
+model = load_my_model()
+
+# Backup the original standard output
+original_stdout = sys.stdout
+
+# Create a new string buffer and set it as the standard output
+sys.stdout = buffer = StringIO()
+
+# Print the model summary
+model.summary()
+
+# Reset the standard output to its original value
+sys.stdout = original_stdout
+
+# Get the model summary from the buffer
+model_summary = buffer.getvalue()
+
+# Display the model summary in the Streamlit app
+st.write(model_summary)
 
 if uploaded_image is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
