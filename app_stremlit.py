@@ -46,7 +46,7 @@ if uploaded_image is not None:
     st.image(img, caption="Uploaded MRI Image", use_column_width=True)
 
     try:
-        img_for_pred = img.resize((256, 256))
+        img_for_pred = img.resize((64, 64))  # Resize the image to match the model's expected input shape
         img_array = np.array(img_for_pred) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         
