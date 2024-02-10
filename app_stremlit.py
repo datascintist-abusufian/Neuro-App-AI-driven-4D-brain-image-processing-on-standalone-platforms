@@ -5,6 +5,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from sklearn.metrics import accuracy_score
+from tensorflow.keras.utils import print_summary
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif",use_column_width=True)
 st.sidebar.title("Brain Tumor Detection")
@@ -45,6 +46,12 @@ sys.stdout = buffer = StringIO()
 
 # Print the model summary
 model.summary()
+
+# Print the model summary to a string
+model_summary = print_summary(model, line_length=None, positions=None, print_fn=None)
+
+# Display the model summary in the Streamlit app
+st.write(model_summary)
 
 # Reset the standard output to its original value
 sys.stdout = original_stdout
