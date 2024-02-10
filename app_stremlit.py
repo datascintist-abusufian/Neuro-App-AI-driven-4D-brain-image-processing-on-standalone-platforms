@@ -44,20 +44,6 @@ model = load_my_model()
 buffer = io.StringIO()
 sys.stdout = buffer
 
-# Print the model summary
-model.summary()
-
-# Reset the standard output to its original value
-sys.stdout = sys.__stdout__
-
-# Get the model summary from the buffer
-model_summary = buffer.getvalue()
-
-# Display the model summary in the Streamlit app
-st.write(model_summary)
-
-binary_mask = None  # Initialize binary_mask
-
 if uploaded_image is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
     st.image(img, caption="Uploaded MRI Image", width=400)
