@@ -56,6 +56,8 @@ model_summary = buffer.getvalue()
 # Display the model summary in the Streamlit app
 st.write(model_summary)
 
+binary_mask = None  # Initialize binary_mask
+
 if uploaded_image is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
     st.image(img, caption="Uploaded MRI Image", width=400)
@@ -97,11 +99,11 @@ if uploaded_image is not None:
             # Save the figure
             plt.savefig('overlayed_image.png', bbox_inches='tight')
 
-            st.pyplot(plt)
+            plt.show()  # Display the plot
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
 
-if uploaded_mask is not None:
+if uploaded_mask is not None and binary_mask is not None:
     mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
     mask_array = np.array(mask)
     # Calculate accuracy on the flattened masks
