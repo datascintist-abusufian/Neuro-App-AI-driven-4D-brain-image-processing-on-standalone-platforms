@@ -40,25 +40,24 @@ if uploaded_image is not None and uploaded_mask is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
     mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
     st.image(img, caption="Uploaded MRI Image", width=400)
-    
     try:
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-    pred_mask = model.predict(img_array)
-    if pred_mask is None:
-        st.error("Model prediction returned None")
-        return
-    threshold = 0.5
-    binary_mask = (pred_mask > threshold).astype(np.uint8)
-    mask_colored = np.stack([binary_mask*255, binary_mask*0, binary_mask*0, binary_mask*255], axis=-1)  # Red color for tumor area
-    overlay = Image.fromarray(mask_colored.squeeze(), mode='RGBA')  # Remove single-dimensional entries from the shape of an array
-    img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
-    st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
-    mask_array = np.array(mask)
-    if mask_array.shape != binary_mask.shape:
-        st.error("The shapes of the ground truth mask and the predicted mask do not match")
-        return
-    accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
-    st.write(f"Prediction accuracy: {accuracy:.2f}")
-except Exception as e:
-    st.error(f"An error occurred: {str(e)}")
+        img_array = np.array(img) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+        pred_mask = model.predict(img_array)
+        if pred_mask is None:
+            st.error("Model prediction returned None")
+            return
+        threshold = 0.5
+        binary_mask = (pred_mask > threshold).astype(np.uint8)
+        mask_colored = np.stack([binary_mask*255, binary_mask*0, binary_mask*0, binary_mask*255], axis=-1)  # Red color for tumor area
+        overlay = Image.fromarray(mask_colored.squeeze(), mode='RGBA')  # Remove single-dimensional entries from the shape of an array
+        img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
+        st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
+        mask_array = np.array(mask)
+        if mask_array.shape != binary_mask.shape:
+            st.error("The shapes of the ground truth mask and the predicted mask do not match")
+            return
+        accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
+        st.write(f"Prediction accuracy: {accuracy:.2f}")
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
