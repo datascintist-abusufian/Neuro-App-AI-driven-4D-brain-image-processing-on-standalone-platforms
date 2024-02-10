@@ -55,8 +55,11 @@ if uploaded_image is not None:
         threshold = 0.5
         binary_mask = (pred_mask > threshold).astype(np.uint8)
         
+        # Resize the mask to match the original image's size
+        binary_mask_resized = np.resize(binary_mask, (img.width, img.height))
+        
         # Create an RGBA image for the overlay with the mask as the alpha channel
-        mask_colored = np.stack([binary_mask*0, binary_mask*255, binary_mask*0, binary_mask*255], axis=-1)
+        mask_colored = np.stack([binary_mask_resized*0, binary_mask_resized*255, binary_mask_resized*0, binary_mask_resized*255], axis=-1)
         overlay = Image.fromarray(mask_colored, mode='RGBA')
         img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
         
