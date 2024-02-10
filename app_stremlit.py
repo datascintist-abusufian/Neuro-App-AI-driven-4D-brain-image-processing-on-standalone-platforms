@@ -53,7 +53,7 @@ if uploaded_image is not None:
         pred_mask = model.predict(img_array)
         
         threshold = 0.5
-        binary_mask = (pred_mask[0, :, :, 0] > threshold).astype(np.uint8)
+        binary_mask = (pred_mask > threshold).astype(np.uint8)
         
         # Create an RGBA image for the overlay with the mask as the alpha channel
         mask_colored = np.stack([binary_mask*0, binary_mask*255, binary_mask*0, binary_mask*255], axis=-1)
