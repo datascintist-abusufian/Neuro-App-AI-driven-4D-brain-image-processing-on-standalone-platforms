@@ -40,6 +40,7 @@ if uploaded_image is not None and uploaded_mask is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
     mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
     st.image(img, caption="Uploaded MRI Image", width=400)
+    
     try:
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
