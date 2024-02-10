@@ -44,13 +44,12 @@ def load_my_model():
 model = load_my_model()
 
 if uploaded_image is not None and uploaded_mask is not None:
-    img = Image.open(uploaded_image).convert('RGB')
-    mask = Image.open(uploaded_mask).convert('L')  # Load the mask as grayscale
+    img = Image.open(uploaded_image).convert('RGB').resize((64, 64))  # Resize the image before processing
+    mask = Image.open(uploaded_mask).convert('L').resize((64, 64))  # Resize the mask before processing
     st.image(img, caption="Uploaded MRI Image", use_column_width=True)
 
     try:
-        img_for_pred = img.resize((64, 64))  # Resize the image to match the model's expected input shape
-        img_array = np.array(img_for_pred) / 255.0
+        img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         
         pred_mask = model.predict(img_array)
@@ -58,19 +57,16 @@ if uploaded_image is not None and uploaded_mask is not None:
         threshold = 0.5
         binary_mask = (pred_mask > threshold).astype(np.uint8)
         
-        # Resize the mask to match the original image's size
-        binary_mask_resized = np.resize(binary_mask, (img.width, img.height))
-        
         # Create an RGBA image for the overlay with the mask as the alpha channel
-        mask_colored = np.stack([binary_mask_resized*0, binary_mask_resized*255, binary_mask_resized*0, binary_mask_resized*255], axis=-1)
+        mask_colored = np.stack([binary_mask*0, binary_mask*255, binary_mask*0, binary_mask*255], axis=-1)
         overlay = Image.fromarray(mask_colored, mode='RGBA')
         img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
         
         st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
 
         # Calculate and display the accuracy
-        mask_array = np.array(mask.resize((img.width, img.height)))  # Resize the ground truth mask to match the predicted mask
-        accuracy = accuracy_score(mask_array.flatten(), binary_mask_resized.flatten())
+        mask_array = np.array(mask)  # The mask is already the correct size
+        accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
         st.write(f"Prediction accuracy: {accuracy:.2f}")
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")  # Display the actual error message
