@@ -80,11 +80,11 @@ if uploaded_image is not None:
             plt.imshow(binary_mask, alpha=0.5, cmap='Reds')  # Overlay the mask
             plt.title('Image with Predicted Mask')
             plt.axis('on')
-
+            
             # Save the figure
             plt.savefig('overlayed_image.png', bbox_inches='tight')
 
-            plt.show()  # Display the plot
+            st.pyplot()  # Display the plot
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
 
