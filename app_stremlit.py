@@ -1,11 +1,13 @@
 import os
 import requests
+import sys
+import io
 from tensorflow.keras.models import load_model
 import streamlit as st
 from PIL import Image
 import numpy as np
 from sklearn.metrics import accuracy_score
-from tensorflow.keras.utils import print_summary
+import matplotlib.pyplot as plt
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif",use_column_width=True)
 st.sidebar.title("Brain Tumor Detection")
@@ -38,23 +40,15 @@ def load_my_model():
 
 model = load_my_model()
 
-# Backup the original standard output
-original_stdout = sys.stdout
-
 # Create a new string buffer and set it as the standard output
-sys.stdout = buffer = StringIO()
+buffer = io.StringIO()
+sys.stdout = buffer
 
 # Print the model summary
 model.summary()
 
-# Print the model summary to a string
-model_summary = print_summary(model, line_length=None, positions=None, print_fn=None)
-
-# Display the model summary in the Streamlit app
-st.write(model_summary)
-
 # Reset the standard output to its original value
-sys.stdout = original_stdout
+sys.stdout = sys.__stdout__
 
 # Get the model summary from the buffer
 model_summary = buffer.getvalue()
@@ -87,6 +81,23 @@ if uploaded_image is not None:
                 st.write("Tumor detected. Please consult with a doctor.")
             else:
                 st.write("No tumor detected. However, consult with a doctor for an accurate diagnosis.")
+            
+            # Overlay the mask on the original image
+            plt.figure(figsize=(10, 10))
+            plt.subplot(1, 2, 1)
+            plt.imshow(img_array[0])
+            plt.title('Original Image')
+            plt.axis('off')
+            plt.subplot(1, 2, 2)
+            plt.imshow(img_array[0])
+            plt.imshow(binary_mask, alpha=0.5, cmap='Reds')  # Overlay the mask
+            plt.title('Image with Predicted Mask')
+            plt.axis('off')
+
+            # Save the figure
+            plt.savefig('overlayed_image.png', bbox_inches='tight')
+
+            st.pyplot(plt)
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
 
