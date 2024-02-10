@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
+st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", width=400)
 st.sidebar.title("Brain Tumor Detection")
 st.sidebar.write("User friendly, Public can test the MRI image segmentation accuracy")
 uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"], key="file_uploader")
@@ -39,7 +39,7 @@ model = load_my_model()
 if uploaded_image is not None and uploaded_mask is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
     mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
-    st.image(img, caption="Uploaded MRI Image", use_column_width=True)
+    st.image(img, caption="Uploaded MRI Image", width=400)
     try:
         img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
