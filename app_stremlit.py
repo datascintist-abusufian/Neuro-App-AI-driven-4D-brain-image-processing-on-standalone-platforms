@@ -4,6 +4,7 @@ from keras.models import load_model
 import streamlit as st
 from PIL import Image
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=True)
 
@@ -11,6 +12,7 @@ st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", use_column_width=T
 st.sidebar.title("Brain Tumor Detection")
 st.sidebar.write("User friendly, Public can test the MRI image segmentation accuracy")
 uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"], key="file_uploader")
+uploaded_mask = st.sidebar.file_uploader("Choose the corresponding ground truth mask...", type=["jpg", "jpeg", "png"], key="mask_uploader")
 
 # Title and description
 st.title("4D AI Driven Neuro App")
@@ -41,8 +43,9 @@ def load_my_model():
 
 model = load_my_model()
 
-if uploaded_image is not None:
+if uploaded_image is not None and uploaded_mask is not None:
     img = Image.open(uploaded_image).convert('RGB')
+    mask = Image.open(uploaded_mask).convert('L')  # Load the mask as grayscale
     st.image(img, caption="Uploaded MRI Image", use_column_width=True)
 
     try:
@@ -64,7 +67,12 @@ if uploaded_image is not None:
         img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
         
         st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
+
+        # Calculate and display the accuracy
+        mask_array = np.array(mask.resize((img.width, img.height)))  # Resize the ground truth mask to match the predicted mask
+        accuracy = accuracy_score(mask_array.flatten(), binary_mask_resized.flatten())
+        st.write(f"Prediction accuracy: {accuracy:.2f}")
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")  # Display the actual error message
 else:
-    st.error("Please upload an image file.")
+    st.error("Please upload an image file and its corresponding ground truth mask.")
