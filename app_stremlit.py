@@ -43,6 +43,7 @@ if uploaded_image is not None:
         img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         pred_mask = model.predict(img_array)
+        print(pred_mask.shape)  # Add this line here
         if pred_mask is None:
             st.error("Model prediction returned None")
         else:
