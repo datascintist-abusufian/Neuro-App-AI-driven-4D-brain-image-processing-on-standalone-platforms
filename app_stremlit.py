@@ -94,7 +94,7 @@ if uploaded_image is not None:
             plt.imshow(img_array[0])
             plt.imshow(binary_mask, alpha=0.5, cmap='Reds')  # Overlay the mask
             plt.title('Image with Predicted Mask')
-            plt.axis('off')
+            plt.axis('on')
 
             # Save the figure
             plt.savefig('overlayed_image.png', bbox_inches='tight')
