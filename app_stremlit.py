@@ -59,5 +59,11 @@ if uploaded_image is not None and uploaded_mask is not None:
             else:
                 accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
                 st.write(f"Prediction accuracy: {accuracy:.2f}")
+                # Tumor detection logic
+                tumor_detected = binary_mask.max() > threshold
+                if tumor_detected:
+                    st.write("Tumor detected. Please consult with a doctor.")
+                else:
+                    st.write("No tumor detected. However, consult with a doctor for an accurate diagnosis.")
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
