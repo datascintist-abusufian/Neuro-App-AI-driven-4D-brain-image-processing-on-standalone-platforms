@@ -4,7 +4,6 @@ from tensorflow.keras.models import load_model
 import streamlit as st
 from PIL import Image
 import numpy as np
-from sklearn.metrics import accuracy_score
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif",use_column_width=True)
 st.sidebar.title("Brain Tumor Detection")
@@ -36,9 +35,8 @@ def load_my_model():
 
 model = load_my_model()
 
-if uploaded_image is not None and uploaded_mask is not None:
+if uploaded_image is not None:
     img = Image.open(uploaded_image).convert('RGB').resize((64, 64))
-    mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
     st.image(img, caption="Uploaded MRI Image", width=400)
     try:
         img_array = np.array(img) / 255.0
@@ -50,10 +48,7 @@ if uploaded_image is not None and uploaded_mask is not None:
             threshold = 0.5
             binary_mask = (pred_mask > threshold).astype(np.uint8)
             binary_mask = np.squeeze(binary_mask)  # Remove batch and channel dimensions
-            mask_array = np.array(mask)
-            # Calculate accuracy on the flattened masks
-            accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
-            st.write(f"Prediction accuracy: {accuracy:.2f}")
+            st.image(binary_mask, caption="Predicted Mask", width=400)
             # Tumor detection logic
             tumor_detected = binary_mask.max() > threshold
             if tumor_detected:
@@ -62,3 +57,10 @@ if uploaded_image is not None and uploaded_mask is not None:
                 st.write("No tumor detected. However, consult with a doctor for an accurate diagnosis.")
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
+
+if uploaded_mask is not None:
+    mask = Image.open(uploaded_mask).convert('L').resize((64, 64))
+    mask_array = np.array(mask)
+    # Calculate accuracy on the flattened masks
+    accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
+    st.write(f"Prediction accuracy: {accuracy:.2f}")
