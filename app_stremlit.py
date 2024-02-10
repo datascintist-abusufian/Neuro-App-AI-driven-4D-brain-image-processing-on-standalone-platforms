@@ -36,7 +36,6 @@ def load_my_model():
     return model
 
 model = load_my_model()
-model = load_my_model()
 
 # Backup the original standard output
 original_stdout = sys.stdout
