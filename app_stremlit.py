@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif", width=400)
+st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif",use_column_width=True)
 st.sidebar.title("Brain Tumor Detection")
 st.sidebar.write("User friendly, Public can test the MRI image segmentation accuracy")
 uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg", "jpeg", "png"], key="file_uploader")
