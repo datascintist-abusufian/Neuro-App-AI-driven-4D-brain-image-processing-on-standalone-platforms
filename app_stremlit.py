@@ -1,6 +1,6 @@
 import os
 import requests
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 import streamlit as st
 from PIL import Image
 import numpy as np
