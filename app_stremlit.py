@@ -4,6 +4,7 @@ from tensorflow.keras.models import load_model
 import streamlit as st
 from PIL import Image
 import numpy as np
+from sklearn.metrics import accuracy_score
 
 st.image("TAC_Brain_tumor_glioblastoma-Transverse_plane.gif",use_column_width=True)
 st.sidebar.title("Brain Tumor Detection")
@@ -43,7 +44,7 @@ if uploaded_image is not None:
         img_array = np.array(img) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         pred_mask = model.predict(img_array)
-        print(pred_mask.shape)  # Add this line here
+        print("Shape of pred_mask:", pred_mask.shape)  # Add this line here
         if pred_mask is None:
             st.error("Model prediction returned None")
         else:
