@@ -12,6 +12,7 @@ uploaded_image = st.sidebar.file_uploader("Choose an MRI image...", type=["jpg",
 uploaded_mask = st.sidebar.file_uploader("Choose the corresponding ground truth mask...", type=["jpg", "jpeg", "png"], key="mask_uploader")
 st.title("4D AI Driven Neuro App")
 st.write("This app demonstrates Brain Image segmentation and tumor detection and prevention using a web application.")
+st.write("In this version of model design, the MRI image is displayed and the prediction is made as soon as the MRI image is uploaded. The accuracy is calculated and displayed only when the ground truth mask is uploaded.")
 st.markdown("<span style='color:blue'>Author Md Abu Sufian</span>", unsafe_allow_html=True)
 st.write("......Visualisation of Design and Coding Under Construction.........")
 MODEL_PATH = 'BrainTumor10Epochs.h5'
