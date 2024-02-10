@@ -49,12 +49,13 @@ if uploaded_image is not None and uploaded_mask is not None:
         else:
             threshold = 0.5
             binary_mask = (pred_mask > threshold).astype(np.uint8)
+            binary_mask = np.squeeze(binary_mask)  # Remove batch and channel dimensions
             mask_array = np.array(mask)
             if mask_array.shape != binary_mask.shape:
                 st.error("The shapes of the ground truth mask and the predicted mask do not match")
             else:
                 mask_colored = np.stack([binary_mask*255, binary_mask*0, binary_mask*0, binary_mask*255], axis=-1)  # Red color for tumor area
-                overlay = Image.fromarray(mask_colored.squeeze(), mode='RGBA')  # Remove single-dimensional entries from the shape of an array
+                overlay = Image.fromarray(mask_colored, mode='RGBA')  # Remove single-dimensional entries from the shape of an array
                 img_with_overlay = Image.alpha_composite(img.convert('RGBA'), overlay)
                 st.image(img_with_overlay, caption="Segmentation Result", use_column_width=True)
                 accuracy = accuracy_score(mask_array.flatten(), binary_mask.flatten())
