@@ -55,7 +55,6 @@ if uploaded_image is not None:
             pred_mask = np.squeeze(pred_mask, axis=[0, -1])
         elif len(pred_mask.shape) == 3:
             pred_mask = np.squeeze(pred_mask, axis=0)
-        st.write (pred_mask.shape)
         if pred_mask is None:
             st.error("Model prediction returned None")
         else:
